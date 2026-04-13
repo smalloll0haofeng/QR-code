@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>QR code掃描</title>
+<style>
+  body {
+    margin: 0;
+    background-color: black;
+  }
+</style>
+</head>
+<body>
+
+<script>
+const pages = [
+  "QR%20code%20C.html",
+  "QR%20sand.html"
+];
+
+const pick = pages[Math.floor(Math.random() * pages.length)];
+window.location.href = pick;
+</script>
+
+</body>
+</html>
