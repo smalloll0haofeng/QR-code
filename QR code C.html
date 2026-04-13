@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>QR Code 生成器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f7f7f7;
+            padding: 50px;
+        }
+        input {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        #qrcode, #reader {
+            margin-top: 30px;
+        }
+        #fixedLink {
+            margin-top: 40px;
+            font-size: 18px;
+        }
+        a {
+            color: blue;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<h1>QR Code 生成 & 掃描器</h1>
+
+<h2>生成 QR Code</h2>
+<input type="text" id="text" placeholder="輸入網址或文字">
+<button onclick="generateQR()">生成 QR Code</button>
+<button onclick="downloadQR()">下載 QR Code</button>
+<div id="qrcode"></div>
+
+<h2>掃描 QR Code</h2>
+<div id="reader" style="width:300px; margin:auto;"></div>
+<p>掃描結果: <span id="scanResult">尚未掃描</span></p>
+
+<!-- 固定超連結到 QR sand.html -->
+<div id="fixedLink">
+    <a href="QR sand.html">看看我們建立QR cord的工具</a>
+</div>
+
+<!-- QR code 生成 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+<!-- QR code 掃描 -->
+<script src="https://unpkg.com/html5-qrcode@2.3.7/minified/html5-qrcode.min.js"></script>
+<script>
+    let qrElement = null;
+
+    function generateQR() {
+        const value = document.getElementById('text').value;
+        if (!value) {
+            alert('請輸入文字或網址！');
+            return;
+        }
+        document.getElementById('qrcode').innerHTML = '';
+        qrElement = new QRious({
+            element: document.createElement('canvas'),
+            value: value,
+            size: 250
+        });
+        document.getElementById('qrcode').appendChild(qrElement.element);
+    }
+
+    function downloadQR() {
+        if (!qrElement) {
+            alert('請先生成 QR Code！');
+            return;
+        }
+        const link = document.createElement('a');
+        link.href = qrElement.toDataURL();
+        link.download = 'qrcode.png';
+        link.click();
+    }
+
+    // 掃描 QR code
+    const html5QrCode = new Html5Qrcode("reader");
+    Html5Qrcode.getCameras().then(cameras => {
+        if (cameras && cameras.length) {
+            const cameraId = cameras[0].id;
+            html5QrCode.start(
+                cameraId,
+                { fps: 10, qrbox: 250 },
+                (decodedText) => {
+                    document.getElementById('scanResult').textContent = decodedText;
+                },
+                (errorMessage) => {
+                    // 忽略小錯誤
+                }
+            );
+        }
+    }).catch(err => {
+        console.error(err);
+    });
+</script>
+</body>
+</html>
