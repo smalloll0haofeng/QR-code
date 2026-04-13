@@ -1,33 +1,53 @@
-<style>body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
-            background-color: #f0f8ff;
-        }
-        input {
-            margin-top: 20px;
-        }
-        #result {
-            margin-top: 30px;
-            font-size: 20px;
-            color: #333;
-            word-break: break-all;
-        }
-        a {
-            color: blue;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-        #fixedLink {
-            margin-top: 40px;
-            font-size: 18px;
-        }</style>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>QR Code 圖片掃描器</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 50px;
+    background-color: #f0f8ff;
+}
+input {
+    margin-top: 20px;
+}
+#result {
+    margin-top: 30px;
+    font-size: 20px;
+    color: #333;
+    word-break: break-all;
+}
+a {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+#fixedLink {
+    margin-top: 40px;
+    font-size: 18px;
+}
+</style>
+
+</head>
+
+<body>
+
 <h1>QR Code 圖片掃描器</h1>
 <p>選擇一張 QR code 圖片來掃描：</p>
+
 <input id="fileInput" accept="image/*" type="file">
+
 <div id="result">掃描結果會顯示在這裡</div>
+
 <!-- 固定超連結 -->
 <div id="fixedLink">
   <a href="QR%20code%20C.html">看看我們掃描QR cord的網頁</a>
 </div>
+
 <!-- 引入 QR code 解析庫 -->
+
+</body>
+</html>
