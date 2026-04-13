@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>QR Code 掃描器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #f0f8ff;
+        }
+        input {
+            margin-top: 20px;
+        }
+        #result {
+            margin-top: 30px;
+            font-size: 20px;
+            color: #333;
+            word-break: break-all;
+        }
+        a {
+            color: blue;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        #fixedLink {
+            margin-top: 40px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+<h1>QR Code 圖片掃描器</h1>
+<p>選擇一張 QR code 圖片來掃描：</p>
+<input type="file" id="fileInput" accept="image/*">
+
+<div id="result">掃描結果會顯示在這裡</div>
+
+<!-- 固定超連結 -->
+<div id="fixedLink">
+    <a href="QR cord C.html">看看我們掃描QR cord的網頁</a>
+</div>
+
+<!-- 引入 QR code 解析庫 -->
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+<script>
+    const fileInput = document.getElementById('fileInput');
+    const resultDiv = document.getElementById('result');
+
+    fileInput.addEventListener('change', function() {
+        const file = fileInput.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const code = jsQR(imageData.data, canvas.width, canvas.height);
+
+                if (code) {
+                    const text = code.data.trim();
+                    const urlPattern = /^(https?:\/\/[^\s]+)/;
+
+                    resultDiv.innerHTML = ''; // 清空之前的結果
+
+                    if (urlPattern.test(text)) {
+                        // 是網址 → 顯示「掃描結果」文字，點擊打開網址
+                        const link = document.createElement('a');
+                        link.href = text;
+                        link.target = "_blank";
+                        link.textContent = "掃描結果";
+                        resultDiv.appendChild(link);
+                    } else {
+                        // 不是網址 → 換行顯示文字
+                        const span = document.createElement('span');
+                        span.textContent = text;
+                        resultDiv.appendChild(span);
+                    }
+                } else {
+                    resultDiv.textContent = "找不到 QR code，請換一張圖片試試！";
+                }
+            }
+            img.src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+    });
+</script>
+</body>
+</html>
